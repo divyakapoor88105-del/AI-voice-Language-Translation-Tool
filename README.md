@@ -44,19 +44,6 @@ AI Voice Language Translator is a web-based application that enables users to tr
 
 ---
 
-## 📂 Project Structure
-language-translator/
-│
-├── backend/
-│ ├── server.js
-│ └── routes/
-│ └── translate.js
-│
-└── frontend/
-├── index.html
-├── style.css
-└── script.js
-
 ## ⚙️ How It Works
 
 1. User enters text in the input box  
