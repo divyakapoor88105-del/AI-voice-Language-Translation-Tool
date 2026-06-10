@@ -1,11 +1,5 @@
 # AI-voice-Language-Translation-Tool
 AI Voice Language Translator is a web-based application that enables users to translate text between multiple languages with an interactive black-themed UI. It supports source and target language selection, real-time online translation, text-to-speech for both input and output, and a copy feature for better accessibility and usability.
-# 🌍 AI Voice Language Translator
-
-An interactive **AI-powered Language Translation Tool** that allows users to translate text between multiple languages with **Text-to-Speech** support for enhanced accessibility and usability.  
-Built with a modern **black-themed UI**, this project is ideal for **hackathons, demos, and real-world applications**.
-
----
 
 ## 🚀 Features
 
@@ -51,3 +45,36 @@ Built with a modern **black-themed UI**, this project is ideal for **hackathons,
 ---
 
 ## 📂 Project Structure
+language-translator/
+│
+├── backend/
+│ ├── server.js
+│ └── routes/
+│ └── translate.js
+│
+└── frontend/
+├── index.html
+├── style.css
+└── script.js
+
+## ⚙️ How It Works
+
+1. User enters text in the input box  
+2. Selects source & target language  
+3. Clicks **Translate**  
+4. Backend sends request to translation API  
+5. Translated text is displayed on screen  
+6. Translated text is automatically spoken aloud  
+7. User can copy or replay speech if needed
+
+## ▶️ How to Run Locally
+
+### Backend
+```bash
+cd backend
+npm install
+node server.js
+### Frontend
+Open frontend/index.html in browser
+OR
+Use VS Code Live Server extension
