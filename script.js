@@ -1,3 +1,10 @@
+
+let voices = [];
+
+speechSynthesis.onvoiceschanged = () => {
+  voices = speechSynthesis.getVoices();
+};
+
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 
@@ -13,6 +20,8 @@ const copyBtn = document.getElementById("copyBtn");
 inputSpeakBtn.addEventListener("click", () => {
   const text = inputText.value.trim();
   if (!text) return;
+ 
+  speechSynthesis.cancel();
 
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = sourceLang.value === "hi" ? "hi-IN" : "en-US";
@@ -25,7 +34,7 @@ translateBtn.addEventListener("click", async () => {
   if (!text) return;
 
   try {
-    const res = await fetch("http://localhost:5000/api/translate", {
+    const res = await fetch("http://localhost:5001/api/translate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -36,11 +45,39 @@ translateBtn.addEventListener("click", async () => {
     });
 
     const data = await res.json();
+
     outputText.value = data.translatedText;
 
-    // 🔊 SPEAK TRANSLATED TEXT
+    // 🔊 FORCE SPEAK OUTPUT
+    speechSynthesis.cancel();
+
     const utter = new SpeechSynthesisUtterance(data.translatedText);
-    utter.lang = targetLang.value === "hi" ? "hi-IN" : "en-US";
+
+    const voiceMap = {
+      hi: "hi-IN",
+      en: "en-US",
+      fr: "fr-FR",
+      de: "de-DE",
+      es: "es-ES",
+      it: "it-IT",
+      ja: "ja-JP",
+      ko: "ko-KR",
+      ru: "ru-RU",
+      zh: "zh-CN",
+      ar: "ar-SA",
+      ta: "ta-IN",
+      te: "te-IN",
+      mr: "mr-IN",
+      ur: "ur-PK"
+    };
+
+    const lang = voiceMap[targetLang.value] || "en-US";
+    utter.lang = lang;
+
+    const voices = speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === lang);
+    if (voice) utter.voice = voice;
+
     speechSynthesis.speak(utter);
 
   } catch (err) {
@@ -50,12 +87,18 @@ translateBtn.addEventListener("click", async () => {
 
 /* 🔊 OUTPUT SPEAK BUTTON */
 outputSpeakBtn.addEventListener("click", () => {
-  const text = outputText.value.trim();
-  if (!text) return;
+  if (!outputText.value) return;
 
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = targetLang.value === "hi" ? "hi-IN" : "en-US";
-  speechSynthesis.speak(utter);
+  speechSynthesis.cancel();
+
+  const u = new SpeechSynthesisUtterance();
+  u.text = outputText.value;
+  u.lang = "hi-IN"; // hardcoded Hindi for test
+
+  u.onstart = () => console.log("Speech started");
+  u.onerror = (e) => console.log("Speech error", e);
+
+  speechSynthesis.speak(u);
 });
 
 /* 📋 COPY OUTPUT */
